@@ -80,6 +80,108 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </div>
 <div id="data-processing" class="section level2">
 <h2>3. Data Processing</h2>
+<div id="load-and-merge-data" class="section level3">
+<h3>3.1 Load and merge data</h3>
+<p>The raw data files for both the test and train data set were read in with read.table and merged into a composite data set called “mergeData” with a row bind (rbind). In this step I also read in the subject and activity lists for each of the test and train data sets to be added later in the analysis. Finally, all the supporting files, with the variable and activity names, were similarly read in.</p>
+</div>
+<div id="extract-proper-columns" class="section level3">
+<h3>3.2 Extract proper columns</h3>
+<p>Next a list of the index locations (integers) of the columns to be saved was gathered using grep on the variable name list for the phrases “mean()” and “std().” These columns were then extracted from the merged data set by subsetting on the column integer list. The choice to select only the columns with “mean()” and “std()” in the variable names will not include the time averages of the directional data that are used on the “angle()” variable.</p>
+</div>
+<div id="use-appropriate-activity-labels." class="section level3">
+<h3>3.3 Use appropriate Activity labels.</h3>
+<p>The test and train activity data, i.e. acitivty numbers for each observations, were combined with a row bind similarly to the raw data set. This column of activity numbers was added to the full data set with a columb bind (cbind) as was the subject number list. Next, a list of the acitivty names for each observation was created by matching the activity numbers from the data set to the activity number and activity name data. The match() process was used to create a list of the activity data index locations corresponding to each observation row and this list was used to extract the activity names (i.e. descriptions) from the activity data. The activity numbers were then removed from the data set by extracting this column with select().</p>
+</div>
+<div id="rename-variable-names" class="section level3">
+<h3>3.4 Rename variable names</h3>
+<p>Next some substitutions were performed on the variable names to clean them up and make them more descriptive. The following substitutions were performed:</p>
+<ul>
+<li>Remove all special characters, i.e. ()-_.</li>
+<li>Change “mean” and “std” to “Mean” and “StdDev.”</li>
+<li>Change the leading “t” and “f” to “timeDomain” and “frequencyDoman.”</li>
+<li>Remove double instances of “Body.”</li>
+<li>Change “Acc” and “Gyro” to “AccelerationSignal” and “GyroscopeSignal.”</li>
+<li>Change “X,” “Y,” and “Z” to “(XYZ)direction.”</li>
+<li>Finally, change “Mag” to “Magnitude.”</li>
+</ul>
+<p>The final variable list is as follows:</p>
+<ul>
+<li>timeDomainBodyAccelerationSignalMeanXdirection</li>
+<li>timeDomainBodyAccelerationSignalMeanYdirection</li>
+<li>timeDomainBodyAccelerationSignalMeanZdirection</li>
+<li>timeDomainBodyAccelerationSignalStdDevXdirection</li>
+<li>timeDomainBodyAccelerationSignalStdDevYdirection</li>
+<li>timeDomainBodyAccelerationSignalStdDevZdirection</li>
+<li>timeDomainGravityAccelerationSignalMeanXdirection</li>
+<li>timeDomainGravityAccelerationSignalMeanYdirection</li>
+<li>timeDomainGravityAccelerationSignalMeanZdirection</li>
+<li>timeDomainGravityAccelerationSignalStdDevXdirection</li>
+<li>timeDomainGravityAccelerationSignalStdDevYdirection</li>
+<li>timeDomainGravityAccelerationSignalStdDevZdirection</li>
+<li>timeDomainBodyAccelerationSignalJerkMeanXdirection</li>
+<li>timeDomainBodyAccelerationSignalJerkMeanYdirection</li>
+<li>timeDomainBodyAccelerationSignalJerkMeanZdirection</li>
+<li>timeDomainBodyAccelerationSignalJerkStdDevXdirection</li>
+<li>timeDomainBodyAccelerationSignalJerkStdDevYdirection</li>
+<li>timeDomainBodyAccelerationSignalJerkStdDevZdirection</li>
+<li>timeDomainBodyGryoscopeSignalMeanXdirection</li>
+<li>timeDomainBodyGryoscopeSignalMeanYdirection</li>
+<li>timeDomainBodyGryoscopeSignalMeanZdirection</li>
+<li>timeDomainBodyGryoscopeSignalStdDevXdirection</li>
+<li>timeDomainBodyGryoscopeSignalStdDevYdirection</li>
+<li>timeDomainBodyGryoscopeSignalStdDevZdirection</li>
+<li>timeDomainBodyGryoscopeSignalJerkMeanXdirection</li>
+<li>timeDomainBodyGryoscopeSignalJerkMeanYdirection</li>
+<li>timeDomainBodyGryoscopeSignalJerkMeanZdirection</li>
+<li>timeDomainBodyGryoscopeSignalJerkStdDevXdirection</li>
+<li>timeDomainBodyGryoscopeSignalJerkStdDevYdirection</li>
+<li>timeDomainBodyGryoscopeSignalJerkStdDevZdirection</li>
+<li>timeDomainBodyAccelerationSignalMagnitudeMean</li>
+<li>timeDomainBodyAccelerationSignalMagnitudeStdDev</li>
+<li>timeDomainGravityAccelerationSignalMagnitudeMean</li>
+<li>timeDomainGravityAccelerationSignalMagnitudeStdDev</li>
+<li>timeDomainBodyAccelerationSignalJerkMagnitudeMean</li>
+<li>timeDomainBodyAccelerationSignalJerkMagnitudeStdDev</li>
+<li>timeDomainBodyGryoscopeSignalMagnitudeMean</li>
+<li>timeDomainBodyGryoscopeSignalMagnitudeStdDev</li>
+<li>timeDomainBodyGryoscopeSignalJerkMagnitudeMean</li>
+<li>timeDomainBodyGryoscopeSignalJerkMagnitudeStdDev</li>
+<li>frequencyDomainBodyAccelerationSignalMeanXdirection</li>
+<li>frequencyDomainBodyAccelerationSignalMeanYdirection</li>
+<li>frequencyDomainBodyAccelerationSignalMeanZdirection</li>
+<li>frequencyDomainBodyAccelerationSignalStdDevXdirection</li>
+<li>frequencyDomainBodyAccelerationSignalStdDevYdirection</li>
+<li>frequencyDomainBodyAccelerationSignalStdDevZdirection</li>
+<li>frequencyDomainBodyAccelerationSignalJerkMeanXdirection</li>
+<li>frequencyDomainBodyAccelerationSignalJerkMeanYdirection</li>
+<li>frequencyDomainBodyAccelerationSignalJerkMeanZdirection</li>
+<li>frequencyDomainBodyAccelerationSignalJerkStdDevXdirection</li>
+<li>frequencyDomainBodyAccelerationSignalJerkStdDevYdirection</li>
+<li>frequencyDomainBodyAccelerationSignalJerkStdDevZdirection</li>
+<li>frequencyDomainBodyGryoscopeSignalMeanXdirection</li>
+<li>frequencyDomainBodyGryoscopeSignalMeanYdirection</li>
+<li>frequencyDomainBodyGryoscopeSignalMeanZdirection</li>
+<li>frequencyDomainBodyGryoscopeSignalStdDevXdirection</li>
+<li>frequencyDomainBodyGryoscopeSignalStdDevYdirection</li>
+<li>frequencyDomainBodyGryoscopeSignalStdDevZdirection</li>
+<li>frequencyDomainBodyAccelerationSignalMagnitudeMean</li>
+<li>frequencyDomainBodyAccelerationSignalMagnitudeStdDev</li>
+<li>frequencyDomainBodyAccelerationSignalJerkMagnitudeMean</li>
+<li>frequencyDomainBodyAccelerationSignalJerkMagnitudeStdDev</li>
+<li>frequencyDomainBodyGryoscopeSignalMagnitudeMean</li>
+<li>frequencyDomainBodyGryoscopeSignalMagnitudeStdDev</li>
+<li>frequencyDomainBodyGryoscopeSignalJerkMagnitudeMean</li>
+<li>frequencyDomainBodyGryoscopeSignalJerkMagnitudeStdDev</li>
+</ul>
+</div>
+<div id="create-final-tidy-data-set" class="section level3">
+<h3>3.5 Create final tidy data set</h3>
+<p>Finally, the summary data set was created by using the group_by() and summarise_each() functions. The data was grouped by activity name and subject number and then the average was taken on each of these groups.</p>
+</div>
+</div>
+<div id="notes" class="section level2">
+<h2>Notes</h2>
+<p>The summary data set is output in the file “tidyDataSet_GetAndCleanData-CourseProject.txt” and should be read in with the statement read.table(“tidyDataSet_GetAndCleanData-CourseProject.txt”, header = TRUE). Also, the run_analysis.R script should be in the main project data directory as it references the train and test folders specifically.</p>
 </div>
 </div>
 
